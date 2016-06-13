@@ -1,0 +1,65 @@
+<script src="jquery-1.12.4.min.js"></script>
+<body style='background-color: #00f; color: #fff; font-family: Courier; font-size: 24' onKeyDown='return type()' onClick='return type()'>
+	<div id='container'>
+		MORTECH PARK, System Security Interface<br>
+		Version 4.0.5, Alpha E<br>
+		Ready...<br>
+		<div id='textdiv'></div>
+	</div>
+	<img id='ahahah' src='ah.gif' style='display: none; position: fixed; top: 100; right: 100'>
+	<div style='opacity: 0; position: absolute; top: 0; left: 0' id='dummy'></div>
+</body>
+<script>
+	var strings = ["access security ", "access security grid ", "access main security grid "]
+	var word = 0;
+	var letter = 0;
+	
+	function type() {
+		if (word == 3) { return false; }
+		add(strings[word].charAt(letter++));
+		if (letter == strings[word].length) {
+			word++;
+			letter = 0;
+			add("<br>access: PERMISSION DENIED.");
+			if (word < 3) {
+				add("<br>&gt; ");
+			} else {
+				setTimeout(function() {add("...AND....."); delayStart();},1000);
+			}
+		}
+		return false;
+	}
+	
+	add("&gt; ");
+	function add(value) {
+		$("#textdiv").html($("#textdiv").html() + value);
+	}
+	
+	var count = 0;
+	function delayStart() {
+		setTimeout(function() { goNuts(); }, 1000);
+	}
+	
+	function goNuts() {
+		setInterval(function() {
+			count+=1;
+			if (count == 100) { setTimeout(function() { window.location="index.html"; }, 10000); }
+			if (count > 100) { return; }
+			
+			if (count == 40) {
+				$("#ahahah").show();
+				document.getElementById("dummy").innerHTML = 
+					"<embed src='hahaha.wav' autostart='true' style='opacity: 0' loop='true' />";
+			}
+			
+			
+			var parent = document.getElementById("container");
+			var div = document.createElement("div");
+			var text = document.createTextNode("YOU DIDN'T SAY THE MAGIC WORD!");
+			div.appendChild(text);
+			parent.appendChild(div);
+			window.scrollTo(0,document.body.scrollHeight);
+		},100);
+	}
+	
+</script>
