@@ -188,9 +188,11 @@
 					document.body.style.backgroundColor='#f00';
 					document.getElementById("container").style.backgroundColor='#f99';
 					playSound("beep.wav");
+					document.title = "### ERROR! ###";
 				} else {
 					document.body.style.backgroundColor='#ddd';
 					document.getElementById("container").style.backgroundColor='#fff';
+					document.title = "Mortech NetStatus";
 				}
 			},500);
 		
