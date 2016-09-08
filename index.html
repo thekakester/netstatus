@@ -21,10 +21,12 @@
 					]
 					
 		//How long should we wait before pinging the next host on the list (Time in ms)
-		var WAIT_BETWEEN_PINGS = 500;
+		var WAIT_BETWEEN_PINGS = 50;
 		
 		//After we've pinged everyone in the list, how long should we wait before starting over (tim in ms)
 		var WAIT_BETWEEN_LOOPS = 10000;
+		
+		var PING_TIMEOUT = 10000;	//Time in MS
 	</script>
 	
 	<style>
@@ -152,6 +154,7 @@
 				var hostname = hosts[i][1];
 				var humanname = hosts[i][0];
 				var div = statusDivs[i];
+				var timeout = PING_TIMEOUT / 1000;	//Time in seconds
 				
 				$(div).removeClass();
 				$(div[0]).addClass("bg-info update");
@@ -160,23 +163,30 @@
 				if (hosts[i].length > 2) {
 					port = hosts[i][2];
 				}
-				$.get("proxy.php?timeout=10&port=" + port + "&url=" + escape(hostname), function(data) {
-					//alert(humanname + ": " + data);
-					$(div[0]).removeClass();
-					if (data == "1") {
-						$(div[0]).addClass("bg-success text-success");
-						$(div[1]).html("<span class='glyphicon glyphicon-ok'></span>");
-					} else {
-						error = true;
-						errorBuffer = true;
-						$(div[0]).addClass("red");
-						$(div[1]).html("<span class='glyphicon glyphicon-remove'></span>");
-					}
-					
-					$(div[2]).text(new Date().toLocaleString())
-					
-					//Ping the next one
-					setTimeout(function() { ping(i+1) },WAIT_BETWEEN_PINGS);
+				
+				var url = "proxy.php?timeout=" + timeout + "&port=" + port + "&url=" + escape(hostname);
+				$.ajax({
+					url: url,
+					complete: function(data){
+						console.log(url);
+						console.log(data);
+						$(div[0]).removeClass();
+						if (data.responseText == "1") {
+							$(div[0]).addClass("bg-success text-success");
+							$(div[1]).html("<span class='glyphicon glyphicon-ok'></span>");
+						} else {
+							error = true;
+							errorBuffer = true;
+							$(div[0]).addClass("red");
+							$(div[1]).html("<span class='glyphicon glyphicon-remove'></span>");
+						}
+						
+						$(div[2]).text(new Date().toLocaleString())
+						
+						//Ping the next one
+						setTimeout(function() { ping(i+1) },WAIT_BETWEEN_PINGS);
+					},
+					timeout: PING_TIMEOUT * 2 //in milliseconds.  Doubled to allow first timeout to work
 				});
 			}
 			
