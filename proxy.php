@@ -25,6 +25,11 @@
 	
 	
 	// Function to check response time
+	
+	/*IF YOU GET A PERMISSION DENIED ERROR:
+	* Execute this:
+	* sudo setsebool -P httpd_can_network_connect 1
+	*/
 	function pingDomain($domain,$port,$timeout){
 		$starttime = microtime(true);
 		$file      = fsockopen ($domain, $port, $errno, $errstr, $timeout);
